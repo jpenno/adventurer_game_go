@@ -7,7 +7,6 @@ import (
 )
 
 func input() bool {
-	// setPos(1, 5)
 	reader := bufio.NewReader(os.Stdin)
 	char, _, err := reader.ReadRune()
 
