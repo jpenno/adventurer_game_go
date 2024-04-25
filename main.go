@@ -8,28 +8,39 @@ import (
 	"strconv"
 )
 
-type colorRegistry struct {
-	Red      string
-	Green    string
-	Yellow   string
-	Blue     string
-	Mangenta string
-	Cyan     string
-	White    string
-	Defalut  string
-}
+type Color int8
 
-func newColorRegistry() *colorRegistry {
-	return &colorRegistry{
-		Red:      "\033[1;31m",
-		Green:    "\033[1;32m",
-		Yellow:   "\033[1;33m",
-		Blue:     "\033[1;34m",
-		Mangenta: "\033[1;35m",
-		Cyan:     "\033[1;36m",
-		White:    "\033[1;37m",
-		Defalut:  "\033[1;39m",
+const (
+	Red Color = iota
+	Green
+	Yellow
+	Blue
+	Mangenta
+	Cyan
+	White
+	Defalut
+)
+
+func (c Color) String() string {
+	switch c {
+	case Red:
+		return "\033[1;31m"
+	case Green:
+		return "\033[1;32m"
+	case Yellow:
+		return "\033[1;33m"
+	case Blue:
+		return "\033[1;34m"
+	case Mangenta:
+		return "\033[1;35m"
+	case Cyan:
+		return "\033[1;36m"
+	case White:
+		return "\033[1;37m"
+	case Defalut:
+		return "\033[1;39m"
 	}
+	return "\033[1;39m"
 }
 
 func clear() {
@@ -40,26 +51,9 @@ func setPos(x int, y int) {
 	fmt.Printf("\033[%d;%dH", y, x) // Set cursor position
 }
 
-func printPos(c string, x int, y int) {
+func printPos(c string, x int, y int, color Color) {
 	setPos(x, y)
-	color := newColorRegistry()
-	r := rand.Intn(8)
-	switch r {
-	case 1:
-		fmt.Printf(color.Green) // Set cursor position
-	case 2:
-		fmt.Printf(color.Red) // Set cursor position
-	case 3:
-		fmt.Printf(color.Yellow) // Set cursor position
-	case 4:
-		fmt.Printf(color.Blue) // Set cursor position
-	case 5:
-		fmt.Printf(color.Mangenta) // Set cursor position
-	case 6:
-		fmt.Printf(color.Cyan) // Set cursor position
-	case 7:
-		fmt.Printf(color.White) // Set cursor position
-	}
+	fmt.Printf("%v", color)
 	fmt.Printf(c)
 }
 
@@ -76,7 +70,7 @@ func draw() {
 		for x := 1; x <= 100; x++ {
 			r := rand.Intn(10)
 			c := strconv.Itoa(r)
-			printPos(c, x, y)
+			printPos(c, x, y, Defalut)
 		}
 	}
 }
