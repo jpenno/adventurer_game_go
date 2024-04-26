@@ -1,4 +1,4 @@
-package main
+package Color
 
 type Color int8
 

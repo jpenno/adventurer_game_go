@@ -1,6 +1,8 @@
 package main
 
 import (
+	"adventure_game/color"
+	"adventure_game/window"
 	"bufio"
 	"fmt"
 	"os"
@@ -24,16 +26,16 @@ func input() bool {
 func main() {
 	fmt.Println("hello world")
 
-	window := newWindow()
-	window.hideCursor()
-	window.clear()
+	window := Window.NewWindow()
+	window.HideCursor()
+	window.Clear()
 
 	for {
-		window.draw()
-		window.printPos("x", 10, 10, Red)
+		window.Draw()
+		window.PrintPos("x", 10, 10, Color.Red)
 		if input() {
 			break
 		}
 	}
-	window.showCursor()
+	window.ShowCursor()
 }
