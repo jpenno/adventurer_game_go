@@ -31,8 +31,9 @@ func main() {
 	window.Clear()
 
 	for {
-		window.Draw()
-		window.PrintPos("x", 10, 10, Color.Red)
+		// window.Draw()
+		// window.PrintPos("x", 10, 10, Color.Red)
+		window.DrawBorder(Window.Rect{X: 1, Y: 1, Width: 4, Height: 4}, Color.Blue)
 		if input() {
 			break
 		}

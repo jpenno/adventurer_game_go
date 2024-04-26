@@ -1,11 +1,18 @@
 package Window
 
 import (
-	"adventure_game/color"
+	Color "adventure_game/color"
 	"fmt"
 	"math/rand"
 	"strconv"
 )
+
+type Rect struct {
+	X      int
+	Y      int
+	Width  int
+	Height int
+}
 
 type Window struct {
 	width  int
@@ -49,5 +56,28 @@ func (w Window) Draw() {
 			c := strconv.Itoa(r)
 			w.PrintPos(c, x, y, Color.Defalut)
 		}
+	}
+}
+
+func (w Window) DrawBorder(rect Rect, color Color.Color) {
+	char := "󰝤"
+	// Draw top of the border
+	for x := rect.X; x <= rect.Width; x++ {
+		w.PrintPos(char, x, rect.Y, color)
+	}
+
+	// Draw bottom of the border
+	for x := rect.X; x <= rect.Width; x++ {
+		w.PrintPos(char, x, rect.Y+rect.Height-1, color)
+	}
+
+	// Draw left of the border
+	for y := rect.Y; y <= rect.Height; y++ {
+		w.PrintPos(char, rect.X, y, color)
+	}
+
+	// Draw right of the border
+	for y := rect.Y; y <= rect.Height; y++ {
+		w.PrintPos(char, rect.X+rect.Width-1, y, color)
 	}
 }
