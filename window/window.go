@@ -61,23 +61,15 @@ func (w Window) Draw() {
 
 func (w Window) DrawBorder(rect Rect, color Color.Color) {
 	char := "󰝤"
-	// Draw top of the border
+	// Draw top and bottom border
 	for x := rect.X; x <= rect.Width; x++ {
 		w.PrintPos(char, x, rect.Y, color)
-	}
-
-	// Draw bottom of the border
-	for x := rect.X; x <= rect.Width; x++ {
 		w.PrintPos(char, x, rect.Y+rect.Height-1, color)
 	}
 
-	// Draw left of the border
+	// Draw left and right border
 	for y := rect.Y; y <= rect.Height; y++ {
 		w.PrintPos(char, rect.X, y, color)
-	}
-
-	// Draw right of the border
-	for y := rect.Y; y <= rect.Height; y++ {
 		w.PrintPos(char, rect.X+rect.Width-1, y, color)
 	}
 }
