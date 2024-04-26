@@ -26,6 +26,7 @@ func main() {
 
 	window := newWindow()
 	window.hideCursor()
+	window.clear()
 
 	for {
 		window.draw()
