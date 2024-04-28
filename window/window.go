@@ -27,6 +27,12 @@ func NewWindow() *Window {
 	return &w
 }
 
+func (w Window) Reset() {
+	w.Clear()
+	w.SetPos(0, 0)
+	w.ShowCursor()
+}
+
 func (w Window) PrintPos(c string, x int, y int, color Color.Color) {
 	w.SetPos(x, y)
 	fmt.Printf("%v", color)
@@ -61,15 +67,25 @@ func (w Window) Draw() {
 
 func (w Window) DrawBorder(rect Rect, color Color.Color) {
 	char := "󰝤"
+	// char := "o"
 	// Draw top and bottom border
-	for x := rect.X; x <= rect.Width; x++ {
+	for x := rect.X; x <= rect.X+rect.Width-1; x++ {
 		w.PrintPos(char, x, rect.Y, color)
 		w.PrintPos(char, x, rect.Y+rect.Height-1, color)
 	}
 
 	// Draw left and right border
-	for y := rect.Y; y <= rect.Height; y++ {
+	for y := rect.Y; y <= rect.Y+rect.Height-1; y++ {
 		w.PrintPos(char, rect.X, y, color)
 		w.PrintPos(char, rect.X+rect.Width-1, y, color)
 	}
+
+	// strx := strconv.Itoa(rect.X)
+	// strw := strconv.Itoa(rect.Width)
+	// stry := strconv.Itoa(rect.Y)
+	// w.DrawLine("X: "+strx+" W: "+strw+" Y: "+stry, rect.X, rect.Y, color)
+}
+
+func (w Window) DrawLine(str string, x int, y int, color Color.Color) {
+	w.PrintPos(str, x, y, color)
 }

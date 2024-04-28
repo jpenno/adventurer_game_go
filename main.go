@@ -1,7 +1,7 @@
 package main
 
 import (
-	"adventure_game/color"
+	"adventure_game/game"
 	"adventure_game/window"
 	"bufio"
 	"fmt"
@@ -30,13 +30,13 @@ func main() {
 	window.HideCursor()
 	window.Clear()
 
+	game := Game.NewGame(*window)
+
 	for {
-		// window.Draw()
-		// window.PrintPos("x", 10, 10, Color.Red)
-		window.DrawBorder(Window.Rect{X: 1, Y: 1, Width: 4, Height: 4}, Color.Blue)
+		game.Draw()
 		if input() {
 			break
 		}
 	}
-	window.ShowCursor()
+	window.Reset()
 }
