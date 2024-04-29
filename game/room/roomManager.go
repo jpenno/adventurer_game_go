@@ -1,6 +1,8 @@
 package Room
 
-import Window "adventure_game/window"
+import (
+	Window "adventure_game/window"
+)
 
 type RoomManager struct {
 	width       int
@@ -10,9 +12,10 @@ type RoomManager struct {
 	roomOffSetX int
 	roomOffSetY int
 	rooms       []Room
+	playerPos   int
 }
 
-func NewRoomManager(window Window.Window) RoomManager {
+func NewRoomManager(window Window.Window) *RoomManager {
 	rm := RoomManager{}
 	rm.width = 14
 	rm.height = 5
@@ -20,7 +23,9 @@ func NewRoomManager(window Window.Window) RoomManager {
 	rm.roomHeight = 5
 	rm.roomOffSetX = 3
 	rm.roomOffSetY = 3
+	rm.playerPos = -1
 
+	id := 0
 	for y := 0; y < rm.height; y++ {
 		for x := 0; x < rm.width; x++ {
 			rm.rooms = append(
@@ -33,16 +38,30 @@ func NewRoomManager(window Window.Window) RoomManager {
 						Height: rm.roomHeight,
 					},
 					window,
+					id,
 				),
 			)
+			id++
 		}
 	}
 
-	return rm
+	return &rm
 }
 
-func (rm RoomManager) Draw() {
+func (rm *RoomManager) GetRoom(x int, y int) Room {
+	return rm.rooms[y*rm.width+x]
+}
+
+func (rm *RoomManager) SetPlayerHere(x int, y int) {
+	rm.playerPos = rm.rooms[y*rm.width+x].Id
+}
+
+func (rm *RoomManager) Draw() {
 	for _, r := range rm.rooms {
-		r.Draw()
+		if r.Id == rm.playerPos {
+			r.Draw(true)
+		} else {
+			r.Draw(false)
+		}
 	}
 }

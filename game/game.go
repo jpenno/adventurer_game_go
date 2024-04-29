@@ -10,7 +10,7 @@ type Game struct {
 	window      Window.Window
 	width       int
 	height      int
-	roomManager Room.RoomManager
+	roomManager *Room.RoomManager
 }
 
 func NewGame(window Window.Window) Game {
@@ -21,7 +21,16 @@ func NewGame(window Window.Window) Game {
 	return g
 }
 
-func (g Game) Draw() {
+func (g Game) Run() {
+	g.update()
+	g.draw()
+}
+
+func (g Game) update() {
+	g.roomManager.SetPlayerHere(0, 0)
+}
+
+func (g Game) draw() {
 	mapWidth := 5*14 + 2
 	mapHeight := 5*5 + 2
 	gameinfoHeight := 10

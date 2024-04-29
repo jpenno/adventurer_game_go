@@ -33,7 +33,7 @@ func main() {
 	game := Game.NewGame(*window)
 
 	for {
-		game.Draw()
+		game.Run()
 		if input() {
 			break
 		}
