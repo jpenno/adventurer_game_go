@@ -21,7 +21,7 @@ func NewGame(window Window.Window) Game {
 
 	g.roomManager = Room.NewRoomManager(window)
 	g.player = Player.NewPlayer(Window.Pos{X: 0, Y: 0})
-	g.player.Pos = g.roomManager.MovePlayer(g.player.Pos, g.roomManager.StartRoom)
+	g.player.Pos = g.roomManager.MovePlayer(g.player.Pos, g.roomManager.GetStartRoom())
 
 	return g
 }

@@ -2,6 +2,7 @@ package Room
 
 import (
 	Window "adventure_game/window"
+	"math/rand"
 )
 
 type RoomManager struct {
@@ -26,25 +27,41 @@ func NewRoomManager(window Window.Window) *RoomManager {
 	rm.roomOffSetY = 3
 	rm.playerPos = -1
 	rm.StartRoom = Window.Pos{X: 1, Y: 1}
+	rm.rooms = make([]Room, rm.width*rm.height)
 
+	startPos := Window.Pos{
+		X: rand.Intn(rm.width),
+		Y: rand.Intn(rm.height),
+	}
+
+	i := 0
 	for y := 0; y < rm.height; y++ {
 		for x := 0; x < rm.width; x++ {
-			rm.rooms = append(
-				rm.rooms,
-				NewRoom(
-					Window.Rect{
-						X:      rm.roomWidth*x + rm.roomOffSetX,
-						Y:      rm.roomHeight*y + rm.roomOffSetY,
-						Width:  rm.roomWidth,
-						Height: rm.roomHeight,
-					},
-					window,
-				),
-			)
+			rect := Window.Rect{
+				X:      rm.roomWidth*x + rm.roomOffSetX,
+				Y:      rm.roomHeight*y + rm.roomOffSetY,
+				Width:  rm.roomWidth,
+				Height: rm.roomHeight,
+			}
+			if x == startPos.X && y == startPos.Y {
+				rm.rooms[i] = NewStartRoom(rect, Window.Pos{X: x, Y: y}, window)
+			} else {
+				rm.rooms[i] = NewEmptyRoom(rect, Window.Pos{X: x, Y: y}, window)
+			}
+			i++
 		}
 	}
 
 	return &rm
+}
+
+func (rm *RoomManager) GetStartRoom() Window.Pos {
+	for _, r := range rm.rooms {
+		if r.GetType() == Start {
+			return r.GetPos()
+		}
+	}
+	return Window.Pos{X: -1, Y: -1}
 }
 
 func (rm *RoomManager) MovePlayer(ppos, mpos Window.Pos) Window.Pos {

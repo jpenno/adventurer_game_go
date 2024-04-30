@@ -5,24 +5,40 @@ import (
 	Window "adventure_game/window"
 )
 
-type Room struct {
-	rect   Window.Rect
-	window Window.Window
+type Room interface {
+	Draw(active bool)
+	GetType() RoomType
+	GetPos() Window.Pos
 }
 
-func NewRoom(rect Window.Rect, w Window.Window) Room {
-	return Room{rect: rect, window: w}
+type EmptyRoom struct {
+	drawRect Window.Rect
+	pos      Window.Pos
+	window   Window.Window
+	roomType RoomType
 }
 
-func (r *Room) Draw(active bool) {
+func NewEmptyRoom(rect Window.Rect, pos Window.Pos, w Window.Window) EmptyRoom {
+	return EmptyRoom{drawRect: rect, window: w, pos: pos, roomType: Empty}
+}
+
+func (r EmptyRoom) GetType() RoomType {
+	return r.roomType
+}
+
+func (r EmptyRoom) GetPos() Window.Pos {
+	return Window.Pos{X: r.drawRect.X, Y: r.drawRect.Y}
+}
+
+func (r EmptyRoom) Draw(active bool) {
 	color := Color.Cyan
 
 	if active {
 		color = Color.Yellow
-		r.window.DrawLine("x", r.rect.X+2, r.rect.Y+2, color)
+		r.window.DrawLine("x", r.drawRect.X+2, r.drawRect.Y+2, color)
 	} else {
-		r.window.DrawLine(" ", r.rect.X+2, r.rect.Y+2, color)
+		r.window.DrawLine(" ", r.drawRect.X+2, r.drawRect.Y+2, color)
 	}
 
-	r.window.DrawBorder(r.rect, color)
+	r.window.DrawBorder(r.drawRect, color)
 }
