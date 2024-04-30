@@ -36,6 +36,11 @@ func (g Game) Run() bool {
 }
 
 func (g Game) update() {
+	// reset the map ard put the player in the start room
+	if g.roomManager.GetRoom(g.player.Pos.X, g.player.Pos.Y).GetType() == Room.End {
+		g.roomManager.Reset()
+		g.player.Pos = g.roomManager.MovePlayer(g.player.Pos, g.roomManager.GetStartRoom())
+	}
 }
 
 func (g Game) input() bool {
@@ -67,6 +72,7 @@ func (g Game) input() bool {
 		g.window.DrawLine("bad input", 3, 31, Color.Defalut)
 	}
 	g.player.Pos = g.roomManager.MovePlayer(g.player.Pos, mpos)
+
 	return true
 }
 

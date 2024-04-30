@@ -15,6 +15,7 @@ type RoomManager struct {
 	rooms       []Room
 	playerPos   int
 	StartRoom   Window.Pos
+	window      Window.Window
 }
 
 func NewRoomManager(window Window.Window) *RoomManager {
@@ -27,9 +28,20 @@ func NewRoomManager(window Window.Window) *RoomManager {
 	rm.roomOffSetY = 3
 	rm.playerPos = -1
 	rm.StartRoom = Window.Pos{X: 1, Y: 1}
+	rm.window = window
 	rm.rooms = make([]Room, rm.width*rm.height)
 
+	rm.Reset()
+
+	return &rm
+}
+
+func (rm *RoomManager) Reset() {
 	startPos := Window.Pos{
+		X: rand.Intn(rm.width),
+		Y: rand.Intn(rm.height),
+	}
+	endPos := Window.Pos{
 		X: rand.Intn(rm.width),
 		Y: rand.Intn(rm.height),
 	}
@@ -44,15 +56,15 @@ func NewRoomManager(window Window.Window) *RoomManager {
 				Height: rm.roomHeight,
 			}
 			if x == startPos.X && y == startPos.Y {
-				rm.rooms[i] = NewStartRoom(rect, Window.Pos{X: x, Y: y}, window)
+				rm.rooms[i] = NewStartRoom(rect, Window.Pos{X: x, Y: y}, rm.window)
+			} else if x == endPos.X && y == endPos.Y {
+				rm.rooms[i] = NewEndRoom(rect, Window.Pos{X: x, Y: y}, rm.window)
 			} else {
-				rm.rooms[i] = NewEmptyRoom(rect, Window.Pos{X: x, Y: y}, window)
+				rm.rooms[i] = NewEmptyRoom(rect, Window.Pos{X: x, Y: y}, rm.window)
 			}
 			i++
 		}
 	}
-
-	return &rm
 }
 
 func (rm *RoomManager) GetStartRoom() Window.Pos {
