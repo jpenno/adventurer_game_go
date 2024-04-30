@@ -13,6 +13,7 @@ type RoomManager struct {
 	roomOffSetY int
 	rooms       []Room
 	playerPos   int
+	StartRoom   Window.Pos
 }
 
 func NewRoomManager(window Window.Window) *RoomManager {
@@ -24,8 +25,8 @@ func NewRoomManager(window Window.Window) *RoomManager {
 	rm.roomOffSetX = 3
 	rm.roomOffSetY = 3
 	rm.playerPos = -1
+	rm.StartRoom = Window.Pos{X: 1, Y: 1}
 
-	id := 0
 	for y := 0; y < rm.height; y++ {
 		for x := 0; x < rm.width; x++ {
 			rm.rooms = append(
@@ -38,27 +39,31 @@ func NewRoomManager(window Window.Window) *RoomManager {
 						Height: rm.roomHeight,
 					},
 					window,
-					id,
 				),
 			)
-			id++
 		}
 	}
 
 	return &rm
 }
 
+func (rm *RoomManager) MovePlayer(ppos, mpos Window.Pos) Window.Pos {
+	// Bounds checking
+	if mpos.Y < 0 || mpos.Y >= rm.height || mpos.X < 0 || mpos.X >= rm.width {
+		return ppos
+	}
+
+	rm.playerPos = mpos.Y*rm.width + mpos.X
+	return mpos
+}
+
 func (rm *RoomManager) GetRoom(x int, y int) Room {
 	return rm.rooms[y*rm.width+x]
 }
 
-func (rm *RoomManager) SetPlayerHere(x int, y int) {
-	rm.playerPos = rm.rooms[y*rm.width+x].Id
-}
-
 func (rm *RoomManager) Draw() {
-	for _, r := range rm.rooms {
-		if r.Id == rm.playerPos {
+	for i, r := range rm.rooms {
+		if i == rm.playerPos {
 			r.Draw(true)
 		} else {
 			r.Draw(false)

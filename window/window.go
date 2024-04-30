@@ -14,6 +14,11 @@ type Rect struct {
 	Height int
 }
 
+type Pos struct {
+	X int
+	Y int
+}
+
 type Window struct {
 	width  int
 	height int
