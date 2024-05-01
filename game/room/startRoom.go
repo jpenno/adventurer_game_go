@@ -6,33 +6,21 @@ import (
 )
 
 type StartRoom struct {
-	drawRect Window.Rect
-	pos      Window.Pos
-	window   Window.Window
-	roomType RoomType
+	BaseRoom
 }
 
 func NewStartRoom(rect Window.Rect, pos Window.Pos, w Window.Window) StartRoom {
-	return StartRoom{drawRect: rect, pos: pos, window: w, roomType: Start}
-}
-
-func (r StartRoom) GetType() RoomType {
-	return r.roomType
-}
-
-func (r StartRoom) GetPos() Window.Pos {
-	return r.pos
-}
-
-func (r StartRoom) Draw(active bool) {
-	color := Color.Green
-
-	if active {
-		color = Color.Yellow
-		r.window.DrawLine("x", r.drawRect.X+2, r.drawRect.Y+2, color)
-	} else {
-		r.window.DrawLine(" ", r.drawRect.X+2, r.drawRect.Y+2, color)
+	return StartRoom{
+		BaseRoom: NewBaseRoom(rect, pos, w, Start, Color.Green, Color.Yellow),
 	}
-
-	r.window.DrawBorder(r.drawRect, color)
+	// return StartRoom{
+	// 	BaseRoom{
+	// 		drawRect:    rect,
+	// 		pos:         pos,
+	// 		window:      w,
+	// 		roomType:    Start,
+	// 		color:       Color.Green,
+	// 		activeColor: Color.Yellow,
+	// 	},
+	// }
 }

@@ -37,14 +37,7 @@ func NewRoomManager(window Window.Window) *RoomManager {
 }
 
 func (rm *RoomManager) Reset() {
-	startPos := Window.Pos{
-		X: rand.Intn(rm.width),
-		Y: rand.Intn(rm.height),
-	}
-	endPos := Window.Pos{
-		X: rand.Intn(rm.width),
-		Y: rand.Intn(rm.height),
-	}
+	roomTypeList := rm.makeRoomList()
 
 	i := 0
 	for y := 0; y < rm.height; y++ {
@@ -55,16 +48,41 @@ func (rm *RoomManager) Reset() {
 				Width:  rm.roomWidth,
 				Height: rm.roomHeight,
 			}
-			if x == startPos.X && y == startPos.Y {
+
+			switch roomTypeList[i] {
+			case Start:
 				rm.rooms[i] = NewStartRoom(rect, Window.Pos{X: x, Y: y}, rm.window)
-			} else if x == endPos.X && y == endPos.Y {
+			case End:
 				rm.rooms[i] = NewEndRoom(rect, Window.Pos{X: x, Y: y}, rm.window)
-			} else {
+			case Empty:
 				rm.rooms[i] = NewEmptyRoom(rect, Window.Pos{X: x, Y: y}, rm.window)
 			}
+
 			i++
 		}
 	}
+}
+
+func (rm *RoomManager) makeRoomList() []RoomType {
+	roomTypeList := make([]RoomType, rm.width*rm.height)
+	startIndex := rand.Intn(len(roomTypeList))
+	endIndex := rand.Intn(len(roomTypeList))
+
+	for i := range rm.rooms {
+		if i == startIndex {
+			roomTypeList[i] = Start
+		} else if i == endIndex {
+			roomTypeList[i] = End
+		} else {
+			roomTypeList[i] = Empty
+		}
+	}
+
+	return roomTypeList
+}
+
+func (rm *RoomManager) spawnRoom() {
+
 }
 
 func (rm *RoomManager) GetStartRoom() Window.Pos {
@@ -74,6 +92,15 @@ func (rm *RoomManager) GetStartRoom() Window.Pos {
 		}
 	}
 	return Window.Pos{X: -1, Y: -1}
+}
+
+func (rm *RoomManager) GetEndRoom() int {
+	for i, r := range rm.rooms {
+		if r.GetType() == End {
+			return i
+		}
+	}
+	return 0
 }
 
 func (rm *RoomManager) MovePlayer(ppos, mpos Window.Pos) Window.Pos {
@@ -86,8 +113,8 @@ func (rm *RoomManager) MovePlayer(ppos, mpos Window.Pos) Window.Pos {
 	return mpos
 }
 
-func (rm *RoomManager) GetRoom(x int, y int) Room {
-	return rm.rooms[y*rm.width+x]
+func (rm *RoomManager) GetRoom(pos Window.Pos) Room {
+	return rm.rooms[pos.Y*rm.width+pos.X]
 }
 
 func (rm *RoomManager) Draw() {

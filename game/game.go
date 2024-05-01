@@ -37,7 +37,7 @@ func (g Game) Run() bool {
 
 func (g Game) update() {
 	// reset the map ard put the player in the start room
-	if g.roomManager.GetRoom(g.player.Pos.X, g.player.Pos.Y).GetType() == Room.End {
+	if g.roomManager.GetRoom(g.player.Pos).GetType() == Room.End {
 		g.roomManager.Reset()
 		g.player.Pos = g.roomManager.MovePlayer(g.player.Pos, g.roomManager.GetStartRoom())
 	}
