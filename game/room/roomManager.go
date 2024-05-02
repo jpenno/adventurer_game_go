@@ -6,16 +6,18 @@ import (
 )
 
 type RoomManager struct {
-	width       int
-	height      int
-	roomWidth   int
-	roomHeight  int
-	roomOffSetX int
-	roomOffSetY int
-	rooms       []Room
-	playerPos   int
-	StartRoom   Window.Pos
-	window      Window.Window
+	width        int
+	height       int
+	roomWidth    int
+	roomHeight   int
+	roomOffSetX  int
+	roomOffSetY  int
+	rooms        []Room
+	playerPos    int
+	StartRoom    Window.Pos
+	window       Window.Window
+	list         []int
+	roomTypeList []RoomType
 }
 
 func NewRoomManager(window Window.Window) *RoomManager {
@@ -37,7 +39,7 @@ func NewRoomManager(window Window.Window) *RoomManager {
 }
 
 func (rm *RoomManager) Reset() {
-	roomTypeList := rm.makeRoomList()
+	rm.makeRoomList()
 
 	i := 0
 	for y := 0; y < rm.height; y++ {
@@ -49,7 +51,7 @@ func (rm *RoomManager) Reset() {
 				Height: rm.roomHeight,
 			}
 
-			switch roomTypeList[i] {
+			switch rm.roomTypeList[i] {
 			case Start:
 				rm.rooms[i] = NewStartRoom(rect, Window.Pos{X: x, Y: y}, rm.window)
 			case End:
@@ -63,26 +65,23 @@ func (rm *RoomManager) Reset() {
 	}
 }
 
-func (rm *RoomManager) makeRoomList() []RoomType {
-	roomTypeList := make([]RoomType, rm.width*rm.height)
-	startIndex := rand.Intn(len(roomTypeList))
-	endIndex := rand.Intn(len(roomTypeList))
-
-	for i := range rm.rooms {
-		if i == startIndex {
-			roomTypeList[i] = Start
-		} else if i == endIndex {
-			roomTypeList[i] = End
-		} else {
-			roomTypeList[i] = Empty
-		}
+func (rm *RoomManager) makeRoomList() {
+	rm.list = make([]int, len(rm.rooms))
+	for i := 0; i < len(rm.list); i++ {
+		rm.list[i] = i
 	}
 
-	return roomTypeList
+	rm.roomTypeList = make([]RoomType, rm.width*rm.height)
+
+	rm.addToRoomList(Start)
+	rm.addToRoomList(End)
 }
 
-func (rm *RoomManager) spawnRoom() {
-
+func (rm *RoomManager) addToRoomList(roomType RoomType) {
+	index := rand.Intn(len(rm.list))
+	rm.roomTypeList[rm.list[index]] = roomType
+	// delete the index in the array
+	rm.list = append(rm.list[:index], rm.list[index+1:]...)
 }
 
 func (rm *RoomManager) GetStartRoom() Window.Pos {
