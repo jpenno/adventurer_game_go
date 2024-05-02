@@ -71,7 +71,7 @@ func (rm *RoomManager) makeRoomList() {
 		rm.list[i] = i
 	}
 
-	rm.roomTypeList = make([]RoomType, rm.width*rm.height)
+	rm.roomTypeList = make([]RoomType, len(rm.rooms))
 
 	rm.addToRoomList(Start)
 	rm.addToRoomList(End)
