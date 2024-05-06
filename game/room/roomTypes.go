@@ -6,4 +6,5 @@ const (
 	Empty RoomType = iota
 	Start
 	End
+	Monster
 )

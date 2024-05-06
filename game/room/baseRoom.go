@@ -7,6 +7,7 @@ import (
 
 type Room interface {
 	Draw(active bool)
+	DrawUI()
 	GetType() RoomType
 	GetPos() Window.Pos
 }
@@ -20,10 +21,11 @@ type BaseRoom struct {
 	activeColor  Color.Color
 	symble       string
 	activeSymble string
+	info         string
 }
 
-func NewBaseRoom(rect Window.Rect, pos Window.Pos, w Window.Window, rt RoomType, color Color.Color, activeColor Color.Color) BaseRoom {
-	return BaseRoom{
+func NewBaseRoom(rect Window.Rect, pos Window.Pos, w Window.Window, rt RoomType, color Color.Color, activeColor Color.Color, info string) *BaseRoom {
+	return &BaseRoom{
 		drawRect:     rect,
 		window:       w,
 		pos:          pos,
@@ -32,6 +34,7 @@ func NewBaseRoom(rect Window.Rect, pos Window.Pos, w Window.Window, rt RoomType,
 		activeColor:  activeColor,
 		symble:       " ",
 		activeSymble: "x",
+		info:         info,
 	}
 }
 
@@ -51,4 +54,9 @@ func (r BaseRoom) Draw(active bool) {
 		r.window.DrawLine(r.symble, r.drawRect.X+2, r.drawRect.Y+2, r.color)
 		r.window.DrawBorder(r.drawRect, r.color)
 	}
+}
+
+func (r BaseRoom) DrawUI() {
+	r.window.DrawLine("Room Info", 77, 14, Color.Defalut)
+	r.window.DrawLine(r.info, 77, 16, Color.Defalut)
 }

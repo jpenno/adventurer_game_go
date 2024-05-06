@@ -20,8 +20,8 @@ func NewGame(window Window.Window) Game {
 	g := Game{window: window, width: 120, height: 32}
 
 	g.roomManager = Room.NewRoomManager(window)
-	g.player = Player.NewPlayer(Window.Pos{X: 0, Y: 0})
-	g.player.Pos = g.roomManager.MovePlayer(g.player.Pos, g.roomManager.GetStartRoom())
+	g.player = Player.NewPlayer(Window.Pos{X: 0, Y: 0}, window)
+	g.player.Pos = g.roomManager.MovePlayer(g.player.Pos, g.roomManager.GetStartRoom(), g.player)
 
 	return g
 }
@@ -39,7 +39,7 @@ func (g Game) update() {
 	// reset the map ard put the player in the start room
 	if g.roomManager.GetRoom(g.player.Pos).GetType() == Room.End {
 		g.roomManager.Reset()
-		g.player.Pos = g.roomManager.MovePlayer(g.player.Pos, g.roomManager.GetStartRoom())
+		g.player.Pos = g.roomManager.MovePlayer(g.player.Pos, g.roomManager.GetStartRoom(), g.player)
 	}
 }
 
@@ -68,18 +68,39 @@ func (g Game) input() bool {
 		mpos.X++
 	case controlls.Quit:
 		return false
+	case controlls.Attack:
+		attack(g.player, g.roomManager.GetRoom(g.player.Pos))
 	default:
 		g.window.DrawLine("bad input", 3, 31, Color.Defalut)
 	}
-	g.player.Pos = g.roomManager.MovePlayer(g.player.Pos, mpos)
+
+	if g.player.Pos == mpos {
+		return true
+	}
+
+	g.player.Pos = g.roomManager.MovePlayer(g.player.Pos, mpos, g.player)
 
 	return true
+}
+
+func attack(p *Player.Player, r Room.Room) {
+	if r.GetType() != Room.Monster {
+		return
+	}
+
+	if r.(Room.MonsterRoom).GetIsMonsterDead() {
+		return
+	}
+
+	r.(Room.MonsterRoom).Attack(p.Attack())
+	p.TakeDamage(r.(Room.MonsterRoom).GetDamage())
 }
 
 func (g Game) draw() {
 	mapWidth := 5*14 + 2
 	mapHeight := 5*5 + 2
 	gameinfoHeight := 10
+	g.window.Clear()
 
 	// Game border
 	g.window.DrawBorder(Window.Rect{X: 1, Y: 1, Width: g.width, Height: g.height}, Color.Red)
@@ -95,4 +116,7 @@ func (g Game) draw() {
 
 	// Rooms
 	g.roomManager.Draw()
+
+	g.player.DrawUI()
+	g.roomManager.GetRoom(g.player.GetPos()).DrawUI()
 }

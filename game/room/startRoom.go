@@ -6,21 +6,11 @@ import (
 )
 
 type StartRoom struct {
-	BaseRoom
+	*BaseRoom
 }
 
 func NewStartRoom(rect Window.Rect, pos Window.Pos, w Window.Window) StartRoom {
 	return StartRoom{
-		BaseRoom: NewBaseRoom(rect, pos, w, Start, Color.Green, Color.Yellow),
+		BaseRoom: NewBaseRoom(rect, pos, w, Start, Color.Green, Color.Yellow, "Start room"),
 	}
-	// return StartRoom{
-	// 	BaseRoom{
-	// 		drawRect:    rect,
-	// 		pos:         pos,
-	// 		window:      w,
-	// 		roomType:    Start,
-	// 		color:       Color.Green,
-	// 		activeColor: Color.Yellow,
-	// 	},
-	// }
 }

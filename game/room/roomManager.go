@@ -1,6 +1,7 @@
 package Room
 
 import (
+	Player "adventure_game/game/player"
 	Window "adventure_game/window"
 	"math/rand"
 )
@@ -58,6 +59,8 @@ func (rm *RoomManager) Reset() {
 				rm.rooms[i] = NewEndRoom(rect, Window.Pos{X: x, Y: y}, rm.window)
 			case Empty:
 				rm.rooms[i] = NewEmptyRoom(rect, Window.Pos{X: x, Y: y}, rm.window)
+			case Monster:
+				rm.rooms[i] = NewMonsterRoom(rect, Window.Pos{X: x, Y: y}, rm.window)
 			}
 
 			i++
@@ -75,6 +78,10 @@ func (rm *RoomManager) makeRoomList() {
 
 	rm.addToRoomList(Start)
 	rm.addToRoomList(End)
+
+	for i := 0; i < 5; i++ {
+		rm.addToRoomList(Monster)
+	}
 }
 
 func (rm *RoomManager) addToRoomList(roomType RoomType) {
@@ -102,13 +109,22 @@ func (rm *RoomManager) GetEndRoom() int {
 	return 0
 }
 
-func (rm *RoomManager) MovePlayer(ppos, mpos Window.Pos) Window.Pos {
+func (rm *RoomManager) MovePlayer(ppos, mpos Window.Pos, player *Player.Player) Window.Pos {
 	// Bounds checking
 	if mpos.Y < 0 || mpos.Y >= rm.height || mpos.X < 0 || mpos.X >= rm.width {
 		return ppos
 	}
 
 	rm.playerPos = mpos.Y*rm.width + mpos.X
+
+	switch rm.GetRoom(ppos).GetType() {
+	case Monster:
+		if rm.GetRoom(ppos).(MonsterRoom).GetIsMonsterDead() {
+			return mpos
+		}
+		player.TakeDamage(rm.GetRoom(ppos).(MonsterRoom).GetDamage())
+	}
+
 	return mpos
 }
 
