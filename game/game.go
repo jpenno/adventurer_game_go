@@ -9,33 +9,36 @@ import (
 )
 
 type Game struct {
-	window      Window.Window
+	window      *Window.Window
 	width       int
 	height      int
 	roomManager *Room.RoomManager
 	player      *Player.Player
+	state       GameState
+	controlls   *Player.Controlls
 }
 
-func NewGame(window Window.Window) Game {
+func NewGame(window *Window.Window) *Game {
 	g := Game{window: window, width: 120, height: 32}
 
 	g.roomManager = Room.NewRoomManager(window)
 	g.player = Player.NewPlayer(Window.Pos{X: 0, Y: 0}, window)
 	g.player.Pos = g.roomManager.MovePlayer(g.player.Pos, g.roomManager.GetStartRoom(), g.player)
+	g.state = Run
+	g.controlls = Player.NewControlls()
 
-	return g
+	return &g
 }
 
-func (g Game) Run() bool {
+func (g *Game) Run() GameState {
 	g.update()
 	g.draw()
-	if !g.input() {
-		return false
-	}
-	return true
+	g.input()
+
+	return g.state
 }
 
-func (g Game) update() {
+func (g *Game) update() {
 	// reset the map ard put the player in the start room
 	if g.roomManager.GetRoom(g.player.Pos).GetType() == Room.End {
 		g.roomManager.Reset()
@@ -43,44 +46,29 @@ func (g Game) update() {
 	}
 }
 
-func (g Game) input() bool {
-	g.window.DrawLine("                   ", 3, 30, Color.Defalut)
+func (g *Game) input() {
 	g.window.DrawLine("Input: ", 3, 30, Color.Defalut)
 
 	var input string
 	fmt.Scanln(&input)
-	g.window.DrawLine("                   ", 3, 31, Color.Defalut)
-	controlls := Player.NewControlls()
 
 	mpos := g.player.Pos
 	switch input {
-	case controlls.Up:
-		g.window.DrawLine("Move up", 3, 31, Color.Defalut)
+	case g.controlls.Up:
 		mpos.Y--
-	case controlls.Down:
-		g.window.DrawLine("down", 3, 31, Color.Defalut)
+	case g.controlls.Down:
 		mpos.Y++
-	case controlls.Left:
-		g.window.DrawLine("left", 3, 31, Color.Defalut)
+	case g.controlls.Left:
 		mpos.X--
-	case controlls.Right:
-		g.window.DrawLine("right", 3, 31, Color.Defalut)
+	case g.controlls.Right:
 		mpos.X++
-	case controlls.Quit:
-		return false
-	case controlls.Attack:
+	case g.controlls.Quit:
+		g.state = Quit
+	case g.controlls.Attack:
 		attack(g.player, g.roomManager.GetRoom(g.player.Pos))
-	default:
-		g.window.DrawLine("bad input", 3, 31, Color.Defalut)
-	}
-
-	if g.player.Pos == mpos {
-		return true
 	}
 
 	g.player.Pos = g.roomManager.MovePlayer(g.player.Pos, mpos, g.player)
-
-	return true
 }
 
 func attack(p *Player.Player, r Room.Room) {
@@ -96,7 +84,7 @@ func attack(p *Player.Player, r Room.Room) {
 	p.TakeDamage(r.(Room.MonsterRoom).GetDamage())
 }
 
-func (g Game) draw() {
+func (g *Game) draw() {
 	mapWidth := 5*14 + 2
 	mapHeight := 5*5 + 2
 	gameinfoHeight := 10

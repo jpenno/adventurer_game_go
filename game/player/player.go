@@ -8,13 +8,13 @@ import (
 )
 
 type Player struct {
-	window Window.Window
+	window *Window.Window
 	Pos    Window.Pos
 	health int
 	damage int
 }
 
-func NewPlayer(pos Window.Pos, w Window.Window) *Player {
+func NewPlayer(pos Window.Pos, w *Window.Window) *Player {
 	return &Player{Pos: pos, window: w, health: 10, damage: 5}
 }
 

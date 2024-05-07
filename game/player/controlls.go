@@ -9,8 +9,8 @@ type Controlls struct {
 	Attack string
 }
 
-func NewControlls() Controlls {
-	return Controlls{
+func NewControlls() *Controlls {
+	return &Controlls{
 		Up:     "up",
 		Down:   "down",
 		Left:   "left",

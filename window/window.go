@@ -3,8 +3,6 @@ package Window
 import (
 	Color "adventure_game/color"
 	"fmt"
-	"math/rand"
-	"strconv"
 )
 
 type Rect struct {
@@ -19,16 +17,11 @@ type Pos struct {
 	Y int
 }
 
-type Window struct {
-	width  int
-	height int
-}
+type Window struct{}
 
 func NewWindow() *Window {
-	w := Window{
-		width:  5,
-		height: 5,
-	}
+	w := Window{}
+
 	return &w
 }
 
@@ -60,19 +53,8 @@ func (w Window) HideCursor() {
 	fmt.Print("\x1b[?25l") // Hide cursor
 }
 
-func (w Window) Draw() {
-	for y := 1; y <= w.height; y++ {
-		for x := 1; x <= w.width; x++ {
-			r := rand.Intn(10)
-			c := strconv.Itoa(r)
-			w.PrintPos(c, x, y, Color.Defalut)
-		}
-	}
-}
-
 func (w Window) DrawBorder(rect Rect, color Color.Color) {
 	char := "󰝤"
-	// char := "o"
 	// Draw top and bottom border
 	for x := rect.X; x <= rect.X+rect.Width-1; x++ {
 		w.PrintPos(char, x, rect.Y, color)
@@ -84,11 +66,6 @@ func (w Window) DrawBorder(rect Rect, color Color.Color) {
 		w.PrintPos(char, rect.X, y, color)
 		w.PrintPos(char, rect.X+rect.Width-1, y, color)
 	}
-
-	// strx := strconv.Itoa(rect.X)
-	// strw := strconv.Itoa(rect.Width)
-	// stry := strconv.Itoa(rect.Y)
-	// w.DrawLine("X: "+strx+" W: "+strw+" Y: "+stry, rect.X, rect.Y, color)
 }
 
 func (w Window) DrawLine(str string, x int, y int, color Color.Color) {

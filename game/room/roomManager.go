@@ -16,12 +16,12 @@ type RoomManager struct {
 	rooms        []Room
 	playerPos    int
 	StartRoom    Window.Pos
-	window       Window.Window
+	window       *Window.Window
 	list         []int
 	roomTypeList []RoomType
 }
 
-func NewRoomManager(window Window.Window) *RoomManager {
+func NewRoomManager(window *Window.Window) *RoomManager {
 	rm := RoomManager{}
 	rm.width = 14
 	rm.height = 5
@@ -110,6 +110,9 @@ func (rm *RoomManager) GetEndRoom() int {
 }
 
 func (rm *RoomManager) MovePlayer(ppos, mpos Window.Pos, player *Player.Player) Window.Pos {
+	if ppos == mpos {
+		return ppos
+	}
 	// Bounds checking
 	if mpos.Y < 0 || mpos.Y >= rm.height || mpos.X < 0 || mpos.X >= rm.width {
 		return ppos

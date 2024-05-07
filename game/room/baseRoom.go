@@ -15,7 +15,7 @@ type Room interface {
 type BaseRoom struct {
 	drawRect     Window.Rect
 	pos          Window.Pos
-	window       Window.Window
+	window       *Window.Window
 	roomType     RoomType
 	color        Color.Color
 	activeColor  Color.Color
@@ -24,7 +24,7 @@ type BaseRoom struct {
 	info         string
 }
 
-func NewBaseRoom(rect Window.Rect, pos Window.Pos, w Window.Window, rt RoomType, color Color.Color, activeColor Color.Color, info string) *BaseRoom {
+func NewBaseRoom(rect Window.Rect, pos Window.Pos, w *Window.Window, rt RoomType, color Color.Color, activeColor Color.Color, info string) *BaseRoom {
 	return &BaseRoom{
 		drawRect:     rect,
 		window:       w,
