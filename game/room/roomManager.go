@@ -61,6 +61,8 @@ func (rm *RoomManager) Reset() {
 				rm.rooms[i] = NewEmptyRoom(rect, Window.Pos{X: x, Y: y}, rm.window)
 			case Monster:
 				rm.rooms[i] = NewMonsterRoom(rect, Window.Pos{X: x, Y: y}, rm.window)
+			case Loot:
+				rm.rooms[i] = NewLootRoom(rect, Window.Pos{X: x, Y: y}, rm.window)
 			}
 
 			i++
@@ -81,6 +83,10 @@ func (rm *RoomManager) makeRoomList() {
 
 	for i := 0; i < 5; i++ {
 		rm.addToRoomList(Monster)
+	}
+
+	for i := 0; i < 5; i++ {
+		rm.addToRoomList(Loot)
 	}
 }
 

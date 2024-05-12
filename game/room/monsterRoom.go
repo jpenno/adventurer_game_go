@@ -12,7 +12,7 @@ type MonsterRoom struct {
 	enemy *Enemy.Enemy
 }
 
-func NewMonsterRoom(rect Window.Rect, pos Window.Pos, w *Window.Window) MonsterRoom {
+func NewMonsterRoom(rect Window.Rect, pos Window.Pos, w *Window.Window) *MonsterRoom {
 	tmp := MonsterRoom{
 		BaseRoom: NewBaseRoom(rect, pos, w, Monster, Color.Mangenta, Color.Yellow, "Monster room"),
 		enemy:    Enemy.NewEnemy(10, 1),
@@ -21,10 +21,10 @@ func NewMonsterRoom(rect Window.Rect, pos Window.Pos, w *Window.Window) MonsterR
 	tmp.symble = ""
 	// tmp.symble = " "
 
-	return tmp
+	return &tmp
 }
 
-func (mr MonsterRoom) Attack(damage int) {
+func (mr MonsterRoom) Attack(damage uint32) {
 	if !mr.enemy.IsDead {
 		mr.enemy.TakeDamage(damage)
 	}
@@ -38,20 +38,20 @@ func (mr MonsterRoom) GetIsMonsterDead() bool {
 	return mr.enemy.IsDead
 }
 
-func (mr MonsterRoom) GetDamage() int {
+func (mr MonsterRoom) GetDamage() uint32 {
 	return mr.enemy.Attack()
 }
 
 func (mr MonsterRoom) DrawUI() {
 
 	mr.info = "Monster room"
-	mr.window.DrawLine(mr.info, 77, 14, Color.Defalut)
+	mr.window.DrawLine(mr.info, mr.infoPos.X, mr.infoPos.Y, Color.Defalut)
 
 	if mr.enemy.IsDead == false {
 		monsterHealth := fmt.Sprintf("Health: %v", mr.enemy.GetHealth())
-		mr.window.DrawLine(monsterHealth, 77, 16, Color.Defalut)
+		mr.window.DrawLine(monsterHealth, mr.infoPos.X, mr.infoPos.Y+2, Color.Defalut)
 
 		monsterDamage := fmt.Sprintf("Damage: %v", mr.enemy.Attack())
-		mr.window.DrawLine(monsterDamage, 77, 18, Color.Defalut)
+		mr.window.DrawLine(monsterDamage, mr.infoPos.X, mr.infoPos.Y+4, Color.Defalut)
 	}
 }

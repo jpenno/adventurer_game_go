@@ -7,6 +7,7 @@ type Controlls struct {
 	Right  string
 	Quit   string
 	Attack string
+	Pickup string
 }
 
 func NewControlls() *Controlls {
@@ -17,5 +18,6 @@ func NewControlls() *Controlls {
 		Right:  "right",
 		Quit:   "q",
 		Attack: "attack",
+		Pickup: "pickup",
 	}
 }

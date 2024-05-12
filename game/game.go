@@ -66,6 +66,8 @@ func (g *Game) input() {
 		g.state = Quit
 	case g.controlls.Attack:
 		attack(g.player, g.roomManager.GetRoom(g.player.Pos))
+	case g.controlls.Pickup:
+		pickup(g.player, g.roomManager.GetRoom(g.player.Pos))
 	}
 
 	g.player.Pos = g.roomManager.MovePlayer(g.player.Pos, mpos, g.player)
@@ -81,7 +83,17 @@ func attack(p *Player.Player, r Room.Room) {
 	}
 
 	r.(Room.MonsterRoom).Attack(p.Attack())
-	p.TakeDamage(r.(Room.MonsterRoom).GetDamage())
+
+	if !r.(Room.MonsterRoom).GetIsMonsterDead() {
+		p.TakeDamage(r.(Room.MonsterRoom).GetDamage())
+	}
+}
+
+func pickup(p *Player.Player, r Room.Room) {
+	if r.GetType() == Room.Loot {
+		pickup := r.(*Room.LootRoom).Pickup()
+		p.Pickup(pickup)
+	}
 }
 
 func (g *Game) draw() {

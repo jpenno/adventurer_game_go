@@ -22,6 +22,7 @@ type BaseRoom struct {
 	symble       string
 	activeSymble string
 	info         string
+	infoPos      Window.Pos
 }
 
 func NewBaseRoom(rect Window.Rect, pos Window.Pos, w *Window.Window, rt RoomType, color Color.Color, activeColor Color.Color, info string) *BaseRoom {
@@ -35,6 +36,7 @@ func NewBaseRoom(rect Window.Rect, pos Window.Pos, w *Window.Window, rt RoomType
 		symble:       " ",
 		activeSymble: "x",
 		info:         info,
+		infoPos:      Window.Pos{X: 77, Y: 3},
 	}
 }
 
@@ -57,6 +59,6 @@ func (r BaseRoom) Draw(active bool) {
 }
 
 func (r BaseRoom) DrawUI() {
-	r.window.DrawLine("Room Info", 77, 14, Color.Defalut)
-	r.window.DrawLine(r.info, 77, 16, Color.Defalut)
+	r.window.DrawLine("Room Info", r.infoPos.X, r.infoPos.Y, Color.Defalut)
+	r.window.DrawLine(r.info, r.infoPos.X, r.infoPos.Y+2, Color.Defalut)
 }
