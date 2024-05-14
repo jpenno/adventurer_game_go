@@ -53,6 +53,13 @@ func (p *Player) DrawUI() {
 	p.window.DrawLine("Player stats", p.infoPos.X, p.infoPos.Y, Color.Defalut)
 	healthStr := fmt.Sprintf("Health: %v\n", p.health)
 	attackStr := fmt.Sprintf("Attack: %v\n", p.Attack())
-	p.window.DrawLine(healthStr, p.infoPos.X, p.infoPos.Y+2, Color.Defalut)
-	p.window.DrawLine(attackStr, p.infoPos.X, p.infoPos.Y+4, Color.Defalut)
+	p.window.DrawLine(healthStr, p.infoPos.X, p.infoPos.Y+1, Color.Defalut)
+	p.window.DrawLine(attackStr, p.infoPos.X, p.infoPos.Y+2, Color.Defalut)
+
+	if p.sword != nil {
+		nameStr := fmt.Sprintf("Weapon: %v\n", p.sword.GetName())
+		p.window.DrawLine(nameStr, p.infoPos.X+20, p.infoPos.Y, Color.Defalut)
+		attackStr := fmt.Sprintf("Attack: %v\n", p.sword.GetDamage())
+		p.window.DrawLine(attackStr, p.infoPos.X+20, p.infoPos.Y+1, Color.Defalut)
+	}
 }
