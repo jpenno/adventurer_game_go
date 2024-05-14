@@ -128,10 +128,10 @@ func (rm *RoomManager) MovePlayer(ppos, mpos Window.Pos, player *Player.Player) 
 
 	switch rm.GetRoom(ppos).GetType() {
 	case Monster:
-		if rm.GetRoom(ppos).(MonsterRoom).GetIsMonsterDead() {
+		if rm.GetRoom(ppos).(*MonsterRoom).GetIsMonsterDead() {
 			return mpos
 		}
-		player.TakeDamage(rm.GetRoom(ppos).(MonsterRoom).GetDamage())
+		player.TakeDamage(rm.GetRoom(ppos).(*MonsterRoom).GetDamage())
 	}
 
 	return mpos

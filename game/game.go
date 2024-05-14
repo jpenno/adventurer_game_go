@@ -78,14 +78,14 @@ func attack(p *Player.Player, r Room.Room) {
 		return
 	}
 
-	if r.(Room.MonsterRoom).GetIsMonsterDead() {
+	if r.(*Room.MonsterRoom).GetIsMonsterDead() {
 		return
 	}
 
-	r.(Room.MonsterRoom).Attack(p.Attack())
+	r.(*Room.MonsterRoom).Attack(p.Attack())
 
-	if !r.(Room.MonsterRoom).GetIsMonsterDead() {
-		p.TakeDamage(r.(Room.MonsterRoom).GetDamage())
+	if !r.(*Room.MonsterRoom).GetIsMonsterDead() {
+		p.TakeDamage(r.(*Room.MonsterRoom).GetDamage())
 	}
 }
 
