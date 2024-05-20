@@ -25,7 +25,7 @@ func NewMonsterRoom(rect Window.Rect, pos Window.Pos, w *Window.Window) *Monster
 }
 
 func (mr MonsterRoom) Attack(damage uint32) {
-	if !mr.enemy.IsDead {
+	if mr.enemy.IsDead == false {
 		mr.enemy.TakeDamage(damage)
 	}
 

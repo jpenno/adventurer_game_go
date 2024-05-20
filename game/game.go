@@ -86,6 +86,8 @@ func attack(player *Player.Player, room Room.Room) {
 
 	if !room.(*Room.MonsterRoom).GetIsMonsterDead() {
 		player.TakeDamage(room.(*Room.MonsterRoom).GetDamage())
+	} else {
+		player.GainXp(1)
 	}
 }
 
