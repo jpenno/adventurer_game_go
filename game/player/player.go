@@ -57,6 +57,8 @@ func (p *Player) GainXp(xpGain uint32) {
 		p.level++
 		p.xpToLevel++
 		p.xp = 0
+		p.maxHealth++
+		p.health = p.maxHealth
 	}
 }
 
