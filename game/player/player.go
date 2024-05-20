@@ -2,7 +2,7 @@ package Player
 
 import (
 	Color "adventure_game/color"
-	"adventure_game/game/item"
+	Item "adventure_game/game/item"
 	myLog "adventure_game/log"
 	Window "adventure_game/window"
 	"fmt"
@@ -11,16 +11,16 @@ import (
 type Player struct {
 	window  *Window.Window
 	Pos     Window.Pos
-	sword   *item.Sword
+	sword   *Item.Sword
 	health  uint32
 	damage  uint32
 	infoPos Window.Pos
 }
 
-func NewPlayer(pos Window.Pos, w *Window.Window) *Player {
+func NewPlayer(pos Window.Pos, window *Window.Window) *Player {
 	return &Player{
 		Pos:     pos,
-		window:  w,
+		window:  window,
 		health:  10,
 		damage:  5,
 		sword:   nil,
@@ -45,8 +45,8 @@ func (p *Player) TakeDamage(damge uint32) {
 	myLog.Log(str)
 }
 
-func (p *Player) Pickup(i item.Item) {
-	p.sword = i.(*item.Sword)
+func (p *Player) Pickup(item Item.Item) {
+	p.sword = item.(*Item.Sword)
 }
 
 func (p *Player) DrawUI() {

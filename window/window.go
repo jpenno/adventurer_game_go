@@ -31,13 +31,13 @@ func (w Window) Reset() {
 	w.ShowCursor()
 }
 
-func (w Window) PrintPos(c string, x int, y int, color Color.Color) {
+func (w Window) PrintPos(content string, x, y int, color Color.Color) {
 	w.SetPos(x, y)
 	fmt.Printf("%v", color)
-	fmt.Printf(c)
+	fmt.Printf(content)
 }
 
-func (w Window) SetPos(x int, y int) {
+func (w Window) SetPos(x, y int) {
 	fmt.Printf("\033[%d;%dH", y, x) // Set cursor position
 }
 

@@ -73,26 +73,26 @@ func (g *Game) input() {
 	g.player.Pos = g.roomManager.MovePlayer(g.player.Pos, mpos, g.player)
 }
 
-func attack(p *Player.Player, r Room.Room) {
-	if r.GetType() != Room.Monster {
+func attack(player *Player.Player, room Room.Room) {
+	if room.GetType() != Room.Monster {
 		return
 	}
 
-	if r.(*Room.MonsterRoom).GetIsMonsterDead() {
+	if room.(*Room.MonsterRoom).GetIsMonsterDead() {
 		return
 	}
 
-	r.(*Room.MonsterRoom).Attack(p.Attack())
+	room.(*Room.MonsterRoom).Attack(player.Attack())
 
-	if !r.(*Room.MonsterRoom).GetIsMonsterDead() {
-		p.TakeDamage(r.(*Room.MonsterRoom).GetDamage())
+	if !room.(*Room.MonsterRoom).GetIsMonsterDead() {
+		player.TakeDamage(room.(*Room.MonsterRoom).GetDamage())
 	}
 }
 
-func pickup(p *Player.Player, r Room.Room) {
-	if r.GetType() == Room.Loot {
-		pickup := r.(*Room.LootRoom).Pickup()
-		p.Pickup(pickup)
+func pickup(player *Player.Player, room Room.Room) {
+	if room.GetType() == Room.Loot {
+		pickup := room.(*Room.LootRoom).Pickup()
+		player.Pickup(pickup)
 	}
 }
 

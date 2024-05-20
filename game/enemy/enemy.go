@@ -6,8 +6,8 @@ type Enemy struct {
 	IsDead bool
 }
 
-func NewEnemy(h, d uint32) *Enemy {
-	return &Enemy{health: h, damage: d}
+func NewEnemy(health, damage uint32) *Enemy {
+	return &Enemy{health: health, damage: damage}
 }
 
 func (e *Enemy) Attack() uint32 {

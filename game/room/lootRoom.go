@@ -12,9 +12,9 @@ type LootRoom struct {
 	item *item.Sword
 }
 
-func NewLootRoom(rect Window.Rect, pos Window.Pos, w *Window.Window) *LootRoom {
+func NewLootRoom(rect Window.Rect, pos Window.Pos, window *Window.Window) *LootRoom {
 	tmp := LootRoom{
-		BaseRoom: NewBaseRoom(rect, pos, w, Loot, Color.Green, Color.Yellow, "Loot room"),
+		BaseRoom: NewBaseRoom(rect, pos, window, Loot, Color.Green, Color.Yellow, "Loot room"),
 		item:     item.NewSword("sword", 1, 5),
 	}
 

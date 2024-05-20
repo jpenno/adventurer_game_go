@@ -25,12 +25,12 @@ type BaseRoom struct {
 	infoPos      Window.Pos
 }
 
-func NewBaseRoom(rect Window.Rect, pos Window.Pos, w *Window.Window, rt RoomType, color Color.Color, activeColor Color.Color, info string) *BaseRoom {
+func NewBaseRoom(rect Window.Rect, pos Window.Pos, window *Window.Window, roomType RoomType, color Color.Color, activeColor Color.Color, info string) *BaseRoom {
 	return &BaseRoom{
 		drawRect:     rect,
-		window:       w,
+		window:       window,
 		pos:          pos,
-		roomType:     rt,
+		roomType:     roomType,
 		color:        color,
 		activeColor:  activeColor,
 		symble:       " ",
