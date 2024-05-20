@@ -15,9 +15,18 @@ func (e *Enemy) Attack() uint32 {
 }
 
 func (e *Enemy) TakeDamage(damge uint32) {
-	e.health -= damge
-	if e.health <= 0 {
+	if e.IsDead {
+		return
+	}
+
+	if e.health < damge {
+		e.health = 0
 		e.IsDead = true
+	} else {
+		e.health -= damge
+		if e.health == 0 {
+			e.IsDead = true
+		}
 	}
 }
 
