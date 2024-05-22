@@ -12,10 +12,10 @@ type MonsterRoom struct {
 	enemy *Enemy.Enemy
 }
 
-func NewMonsterRoom(rect Window.Rect, pos Window.Pos, w *Window.Window) *MonsterRoom {
+func NewMonsterRoom(rect Window.Rect, pos Window.Pos, floorLevel uint32, window *Window.Window) *MonsterRoom {
 	tmp := MonsterRoom{
-		BaseRoom: NewBaseRoom(rect, pos, w, Monster, Color.Mangenta, Color.Yellow, "Monster room"),
-		enemy:    Enemy.NewEnemy(10, 1),
+		BaseRoom: NewBaseRoom(rect, pos, window, Monster, Color.Mangenta, Color.Yellow, "Monster room"),
+		enemy:    Enemy.NewEnemy(5, 5, int(floorLevel)),
 	}
 
 	tmp.symble = ""

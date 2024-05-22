@@ -16,6 +16,7 @@ type Game struct {
 	player      *Player.Player
 	state       GameState
 	controlls   *Player.Controlls
+	floorLevel  uint32
 }
 
 func NewGame(window *Window.Window) *Game {
@@ -26,6 +27,7 @@ func NewGame(window *Window.Window) *Game {
 	g.player.Pos = g.roomManager.MovePlayer(g.player.Pos, g.roomManager.GetStartRoom(), g.player)
 	g.state = Run
 	g.controlls = Player.NewControlls()
+	g.floorLevel = 1
 
 	return &g
 }
@@ -41,7 +43,8 @@ func (g *Game) Run() GameState {
 func (g *Game) update() {
 	// reset the map ard put the player in the start room
 	if g.roomManager.GetRoom(g.player.Pos).GetType() == Room.End {
-		g.roomManager.Reset()
+		g.floorLevel++
+		g.roomManager.Reset(g.floorLevel)
 		g.player.Pos = g.roomManager.MovePlayer(g.player.Pos, g.roomManager.GetStartRoom(), g.player)
 	}
 }

@@ -34,12 +34,12 @@ func NewRoomManager(window *Window.Window) *RoomManager {
 	rm.window = window
 	rm.rooms = make([]Room, rm.width*rm.height)
 
-	rm.Reset()
+	rm.Reset(1)
 
 	return &rm
 }
 
-func (rm *RoomManager) Reset() {
+func (rm *RoomManager) Reset(floorLevel uint32) {
 	rm.makeRoomList()
 
 	i := 0
@@ -60,9 +60,9 @@ func (rm *RoomManager) Reset() {
 			case Empty:
 				rm.rooms[i] = NewEmptyRoom(rect, Window.Pos{X: x, Y: y}, rm.window)
 			case Monster:
-				rm.rooms[i] = NewMonsterRoom(rect, Window.Pos{X: x, Y: y}, rm.window)
+				rm.rooms[i] = NewMonsterRoom(rect, Window.Pos{X: x, Y: y}, floorLevel, rm.window)
 			case Loot:
-				rm.rooms[i] = NewLootRoom(rect, Window.Pos{X: x, Y: y}, rm.window)
+				rm.rooms[i] = NewLootRoom(rect, Window.Pos{X: x, Y: y}, floorLevel, rm.window)
 			}
 
 			i++

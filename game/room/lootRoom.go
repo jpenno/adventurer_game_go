@@ -12,10 +12,10 @@ type LootRoom struct {
 	item *item.Sword
 }
 
-func NewLootRoom(rect Window.Rect, pos Window.Pos, window *Window.Window) *LootRoom {
+func NewLootRoom(rect Window.Rect, pos Window.Pos, floorLevel uint32, window *Window.Window) *LootRoom {
 	tmp := LootRoom{
 		BaseRoom: NewBaseRoom(rect, pos, window, Loot, Color.Green, Color.Yellow, "Loot room"),
-		item:     item.NewSword("sword", 1),
+		item:     item.NewSword("sword", floorLevel),
 	}
 
 	tmp.symble = tmp.item.GetIcon()
