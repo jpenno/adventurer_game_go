@@ -3,6 +3,7 @@ package main
 import (
 	"adventure_game/game"
 	"adventure_game/window"
+	"fmt"
 )
 
 func main() {
@@ -14,6 +15,10 @@ func main() {
 
 	for {
 		switch game.Run() {
+		case Game.PlayerDead:
+			window.Reset()
+			fmt.Print("Game over player died\n")
+			return
 		case Game.Quit:
 			window.Reset()
 			return

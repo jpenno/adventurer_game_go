@@ -3,7 +3,6 @@ package Player
 import (
 	Color "adventure_game/color"
 	Item "adventure_game/game/item"
-	myLog "adventure_game/log"
 	Window "adventure_game/window"
 	"fmt"
 )
@@ -19,6 +18,7 @@ type Player struct {
 	xp        uint32
 	xpToLevel uint32
 	infoPos   Window.Pos
+	IsDead    bool
 }
 
 func NewPlayer(pos Window.Pos, window *Window.Window) *Player {
@@ -33,6 +33,7 @@ func NewPlayer(pos Window.Pos, window *Window.Window) *Player {
 		xpToLevel: 5,
 		sword:     nil,
 		infoPos:   Window.Pos{X: 77, Y: 14},
+		IsDead:    false,
 	}
 }
 
@@ -63,9 +64,21 @@ func (p *Player) GainXp(xpGain uint32) {
 }
 
 func (p *Player) TakeDamage(damge uint32) {
-	p.health -= damge
-	str := fmt.Sprintf("P Health: %v", p.health)
-	myLog.Log(str)
+	if p.IsDead {
+		return
+	}
+
+	if p.health < damge {
+		p.health = 0
+		p.IsDead = true
+	} else {
+		p.health -= damge
+		if p.health == 0 {
+			p.IsDead = true
+		}
+	}
+
+	// p.health -= damge
 }
 
 func (p *Player) Pickup(item Item.Item) {

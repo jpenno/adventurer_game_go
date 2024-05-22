@@ -74,6 +74,10 @@ func (g *Game) input() {
 	}
 
 	g.player.Pos = g.roomManager.MovePlayer(g.player.Pos, mpos, g.player)
+
+	if g.player.IsDead {
+		g.state = PlayerDead
+	}
 }
 
 func attack(player *Player.Player, room Room.Room) {
