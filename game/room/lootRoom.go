@@ -15,7 +15,7 @@ type LootRoom struct {
 func NewLootRoom(rect Window.Rect, pos Window.Pos, window *Window.Window) *LootRoom {
 	tmp := LootRoom{
 		BaseRoom: NewBaseRoom(rect, pos, window, Loot, Color.Green, Color.Yellow, "Loot room"),
-		item:     item.NewSword("sword", 1, 5),
+		item:     item.NewSword("sword", 1),
 	}
 
 	tmp.symble = tmp.item.GetIcon()

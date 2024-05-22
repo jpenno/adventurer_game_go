@@ -1,13 +1,17 @@
 package item
 
+import (
+	"math/rand"
+)
+
 type Sword struct {
 	*baseItem
 }
 
-func NewSword(name string, level, damage uint32) *Sword {
+func NewSword(name string, level uint32) *Sword {
 	stats := make(map[string]uint32)
 	stats["level"] = level
-	stats["damage"] = damage
+	stats["damage"] = level + uint32(rand.Intn(4))
 	return &Sword{
 		baseItem: &baseItem{icon: "󰓥", name: name, stats: stats},
 	}
