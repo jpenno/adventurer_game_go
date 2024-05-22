@@ -81,11 +81,19 @@ func (rm *RoomManager) makeRoomList(floorLevel int) {
 	rm.addToRoomList(Start)
 	rm.addToRoomList(End)
 
-	for i := 0; i < 4+floorLevel; i++ {
+	numMonsterRooms := 4 + floorLevel
+	numLootRooms := 2 + floorLevel
+
+	if numLootRooms+numMonsterRooms >= len(rm.rooms)-5 {
+		numMonsterRooms = 60
+		numLootRooms = 0
+	}
+
+	for i := 0; i < numMonsterRooms; i++ {
 		rm.addToRoomList(Monster)
 	}
 
-	for i := 0; i < 2+floorLevel; i++ {
+	for i := 0; i < numLootRooms; i++ {
 		rm.addToRoomList(Loot)
 	}
 }
