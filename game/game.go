@@ -33,9 +33,9 @@ func NewGame(window *Window.Window) *Game {
 }
 
 func (g *Game) Run() GameState {
-	g.update()
 	g.draw()
 	g.input()
+	g.update()
 
 	return g.state
 }
@@ -46,6 +46,10 @@ func (g *Game) update() {
 		g.floorLevel++
 		g.roomManager.Reset(g.floorLevel)
 		g.player.Pos = g.roomManager.MovePlayer(g.player.Pos, g.roomManager.GetStartRoom(), g.player)
+	}
+
+	if g.player.IsDead {
+		g.state = PlayerDead
 	}
 }
 
@@ -74,10 +78,6 @@ func (g *Game) input() {
 	}
 
 	g.player.Pos = g.roomManager.MovePlayer(g.player.Pos, mpos, g.player)
-
-	if g.player.IsDead {
-		g.state = PlayerDead
-	}
 }
 
 func attack(player *Player.Player, room Room.Room) {
