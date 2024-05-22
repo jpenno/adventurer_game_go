@@ -40,7 +40,7 @@ func NewRoomManager(window *Window.Window) *RoomManager {
 }
 
 func (rm *RoomManager) Reset(floorLevel uint32) {
-	rm.makeRoomList()
+	rm.makeRoomList(int(floorLevel))
 
 	i := 0
 	for y := 0; y < rm.height; y++ {
@@ -70,7 +70,7 @@ func (rm *RoomManager) Reset(floorLevel uint32) {
 	}
 }
 
-func (rm *RoomManager) makeRoomList() {
+func (rm *RoomManager) makeRoomList(floorLevel int) {
 	rm.list = make([]int, len(rm.rooms))
 	for i := 0; i < len(rm.list); i++ {
 		rm.list[i] = i
@@ -81,11 +81,11 @@ func (rm *RoomManager) makeRoomList() {
 	rm.addToRoomList(Start)
 	rm.addToRoomList(End)
 
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 4+floorLevel; i++ {
 		rm.addToRoomList(Monster)
 	}
 
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 2+floorLevel; i++ {
 		rm.addToRoomList(Loot)
 	}
 }
@@ -103,6 +103,7 @@ func (rm *RoomManager) GetStartRoom() Window.Pos {
 			return r.GetPos()
 		}
 	}
+
 	return Window.Pos{X: -1, Y: -1}
 }
 
@@ -112,6 +113,7 @@ func (rm *RoomManager) GetEndRoom() int {
 			return i
 		}
 	}
+
 	return 0
 }
 
