@@ -40,7 +40,10 @@ func NewRoomManager(window *Window.Window) *RoomManager {
 }
 
 func (rm *RoomManager) Reset(floorLevel uint32) {
-	rm.makeRoomList(int(floorLevel))
+	roomTypeCount := make(map[RoomType]int)
+	roomTypeCount[Monster] = 5
+	roomTypeCount[Loot] = 3
+	rm.makeRoomList(roomTypeCount)
 
 	i := 0
 	for y := 0; y < rm.height; y++ {
@@ -70,7 +73,7 @@ func (rm *RoomManager) Reset(floorLevel uint32) {
 	}
 }
 
-func (rm *RoomManager) makeRoomList(floorLevel int) {
+func (rm *RoomManager) makeRoomList(roomTypeCount map[RoomType]int) []RoomType {
 	rm.list = make([]int, len(rm.rooms))
 	for i := 0; i < len(rm.list); i++ {
 		rm.list[i] = i
@@ -81,21 +84,18 @@ func (rm *RoomManager) makeRoomList(floorLevel int) {
 	rm.addToRoomList(Start)
 	rm.addToRoomList(End)
 
-	numMonsterRooms := 4 + floorLevel
-	numLootRooms := 2 + floorLevel
+	// if numLootRooms+numMonsterRooms >= len(rm.rooms)-5 {
+	// 	numMonsterRooms = 60
+	// 	numLootRooms = 0
+	// }
 
-	if numLootRooms+numMonsterRooms >= len(rm.rooms)-5 {
-		numMonsterRooms = 60
-		numLootRooms = 0
+	for roomType, roomCount := range roomTypeCount {
+		for i := 0; i < roomCount; i++ {
+			rm.addToRoomList(roomType)
+		}
 	}
 
-	for i := 0; i < numMonsterRooms; i++ {
-		rm.addToRoomList(Monster)
-	}
-
-	for i := 0; i < numLootRooms; i++ {
-		rm.addToRoomList(Loot)
-	}
+	return rm.roomTypeList
 }
 
 func (rm *RoomManager) addToRoomList(roomType RoomType) {
