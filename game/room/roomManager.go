@@ -7,18 +7,16 @@ import (
 )
 
 type RoomManager struct {
-	width        int
-	height       int
-	roomWidth    int
-	roomHeight   int
-	roomOffSetX  int
-	roomOffSetY  int
-	rooms        []Room
-	playerPos    int
-	StartRoom    Window.Pos
-	window       *Window.Window
-	list         []int
-	roomTypeList []RoomType
+	width       int
+	height      int
+	roomWidth   int
+	roomHeight  int
+	roomOffSetX int
+	roomOffSetY int
+	rooms       []Room
+	playerPos   int
+	window      *Window.Window
+	list        []int
 }
 
 func NewRoomManager(window *Window.Window) *RoomManager {
@@ -30,7 +28,6 @@ func NewRoomManager(window *Window.Window) *RoomManager {
 	rm.roomOffSetX = 3
 	rm.roomOffSetY = 3
 	rm.playerPos = -1
-	rm.StartRoom = Window.Pos{X: 1, Y: 1}
 	rm.window = window
 	rm.rooms = make([]Room, rm.width*rm.height)
 
@@ -40,10 +37,14 @@ func NewRoomManager(window *Window.Window) *RoomManager {
 }
 
 func (rm *RoomManager) Reset(floorLevel uint32) {
-	roomTypeCount := make(map[RoomType]int)
-	roomTypeCount[Monster] = 5
-	roomTypeCount[Loot] = 3
-	rm.makeRoomList(roomTypeCount)
+	roomTypeCount := map[RoomType]int{
+		Monster: 5,
+		Loot:    3,
+		Start:   1,
+		End:     1,
+	}
+
+	roomTypeList := rm.makeRoomList(roomTypeCount, len(rm.rooms))
 
 	i := 0
 	for y := 0; y < rm.height; y++ {
@@ -55,7 +56,7 @@ func (rm *RoomManager) Reset(floorLevel uint32) {
 				Height: rm.roomHeight,
 			}
 
-			switch rm.roomTypeList[i] {
+			switch roomTypeList[i] {
 			case Start:
 				rm.rooms[i] = NewStartRoom(rect, Window.Pos{X: x, Y: y}, rm.window)
 			case End:
@@ -73,16 +74,22 @@ func (rm *RoomManager) Reset(floorLevel uint32) {
 	}
 }
 
-func (rm *RoomManager) makeRoomList(roomTypeCount map[RoomType]int) []RoomType {
-	rm.list = make([]int, len(rm.rooms))
-	for i := 0; i < len(rm.list); i++ {
-		rm.list[i] = i
+func (rm *RoomManager) makeRoomList(roomTypeCount map[RoomType]int, size int) []RoomType {
+	roomTypeList := make([]RoomType, size)
+	numberList := make([]int, size)
+
+	totalRooms := 0
+	for _, roomCount := range roomTypeCount {
+		totalRooms += roomCount
 	}
 
-	rm.roomTypeList = make([]RoomType, len(rm.rooms))
+	if totalRooms > size {
+		return nil
+	}
 
-	rm.addToRoomList(Start)
-	rm.addToRoomList(End)
+	for i := 0; i < len(numberList); i++ {
+		numberList[i] = i
+	}
 
 	// if numLootRooms+numMonsterRooms >= len(rm.rooms)-5 {
 	// 	numMonsterRooms = 60
@@ -91,18 +98,18 @@ func (rm *RoomManager) makeRoomList(roomTypeCount map[RoomType]int) []RoomType {
 
 	for roomType, roomCount := range roomTypeCount {
 		for i := 0; i < roomCount; i++ {
-			rm.addToRoomList(roomType)
+			index := rand.Intn(len(numberList))
+			roomTypeList[numberList[index]] = roomType
+			numberList = remove(numberList, index)
 		}
 	}
 
-	return rm.roomTypeList
+	return roomTypeList
 }
 
-func (rm *RoomManager) addToRoomList(roomType RoomType) {
-	index := rand.Intn(len(rm.list))
-	rm.roomTypeList[rm.list[index]] = roomType
-	// delete the index in the array
-	rm.list = append(rm.list[:index], rm.list[index+1:]...)
+func remove(slice []int, index int) []int {
+	copy(slice[index:], slice[index+1:])
+	return slice[:len(slice)-1]
 }
 
 func (rm *RoomManager) GetStartRoom() Window.Pos {

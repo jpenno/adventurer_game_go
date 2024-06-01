@@ -8,30 +8,72 @@ import (
 func TestMakeRoomList(t *testing.T) {
 	r := NewRoomManager(Window.NewWindow())
 
-	wantMonsterRooms := 5
-	wantLootRooms := 3
+	cases := []struct {
+		Name              string
+		RoomTypeCount     map[RoomType]int
+		WantRoomTypeCount map[RoomType]int
+		RoomCount         int
+	}{
+		{
+			Name: "check room count",
+			RoomTypeCount: map[RoomType]int{
+				Start:   1,
+				End:     1,
+				Monster: 2,
+				Loot:    2,
+			},
+			WantRoomTypeCount: map[RoomType]int{
+				Start:   1,
+				End:     1,
+				Monster: 2,
+				Loot:    2,
+			},
+			RoomCount: 10,
+		},
+	}
 
-	rtc := make(map[RoomType]int)
-	rtc[Monster] = wantMonsterRooms
-	rtc[Loot] = wantLootRooms
+	for _, test := range cases {
+		got := r.makeRoomList(test.RoomTypeCount, test.RoomCount)
+		gotRoomCountList := getRoomCountList(got)
 
-	got := r.makeRoomList(rtc)
-	gotMonsterRooms := 0
-	gotLootRooms := 0
+		for roomType := range test.WantRoomTypeCount {
+			if test.WantRoomTypeCount[roomType] != gotRoomCountList[roomType] {
+				t.Errorf("%q rooms got: %d want: %d", getRoomName(roomType), gotRoomCountList[roomType], test.WantRoomTypeCount[roomType])
+			}
+		}
+	}
+}
 
-	for _, rt := range got {
-		switch rt {
+func getRoomCountList(roomCountList []RoomType) map[RoomType]int {
+	gotRoomCountList := make(map[RoomType]int)
+
+	for _, roomType := range roomCountList {
+		switch roomType {
 		case Monster:
-			gotMonsterRooms++
+			gotRoomCountList[Monster]++
 		case Loot:
-			gotLootRooms++
+			gotRoomCountList[Loot]++
+		case Start:
+			gotRoomCountList[Start]++
+		case End:
+			gotRoomCountList[End]++
 		}
 	}
 
-	if wantMonsterRooms != gotMonsterRooms {
-		t.Errorf("want monster roomsa: %d, got monster rooms: %d", wantMonsterRooms, gotMonsterRooms)
+	return gotRoomCountList
+}
+
+func getRoomName(roomType RoomType) string {
+
+	switch roomType {
+	case Monster:
+		return "Monster"
+	case Loot:
+		return "Loot"
+	case Start:
+		return "Start"
+	case End:
+		return "End"
 	}
-	if wantLootRooms != gotLootRooms {
-		t.Errorf("want monster roomsa: %d, got monster rooms: %d", wantLootRooms, gotLootRooms)
-	}
+	return "no room"
 }
