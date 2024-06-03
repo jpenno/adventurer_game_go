@@ -3,7 +3,18 @@ package Room
 import (
 	Player "adventure_game/game/player"
 	Window "adventure_game/window"
+	"fmt"
 	"math/rand"
+)
+
+type RoomManageaErr string
+
+func (e RoomManageaErr) Error() string {
+	return string(e)
+}
+
+const (
+	ErrTooManyRooms = RoomManageaErr("Too many rooms to add")
 )
 
 type RoomManager struct {
@@ -44,7 +55,10 @@ func (rm *RoomManager) Reset(floorLevel uint32) {
 		End:     1,
 	}
 
-	roomTypeList := rm.makeRoomList(roomTypeCount, len(rm.rooms))
+	roomTypeList, err := rm.makeRoomList(roomTypeCount, len(rm.rooms))
+	if err != nil {
+		fmt.Printf("Err: %q", err)
+	}
 
 	i := 0
 	for y := 0; y < rm.height; y++ {
@@ -74,7 +88,7 @@ func (rm *RoomManager) Reset(floorLevel uint32) {
 	}
 }
 
-func (rm *RoomManager) makeRoomList(roomTypeCount map[RoomType]int, size int) []RoomType {
+func (rm *RoomManager) makeRoomList(roomTypeCount map[RoomType]int, size int) ([]RoomType, error) {
 	roomTypeList := make([]RoomType, size)
 	numberList := make([]int, size)
 
@@ -84,17 +98,12 @@ func (rm *RoomManager) makeRoomList(roomTypeCount map[RoomType]int, size int) []
 	}
 
 	if totalRooms > size {
-		return nil
+		return nil, ErrTooManyRooms
 	}
 
 	for i := 0; i < len(numberList); i++ {
 		numberList[i] = i
 	}
-
-	// if numLootRooms+numMonsterRooms >= len(rm.rooms)-5 {
-	// 	numMonsterRooms = 60
-	// 	numLootRooms = 0
-	// }
 
 	for roomType, roomCount := range roomTypeCount {
 		for i := 0; i < roomCount; i++ {
@@ -104,7 +113,7 @@ func (rm *RoomManager) makeRoomList(roomTypeCount map[RoomType]int, size int) []
 		}
 	}
 
-	return roomTypeList
+	return roomTypeList, nil
 }
 
 func remove(slice []int, index int) []int {
