@@ -125,26 +125,26 @@ func (rm *RoomManager) GetEndRoom() int {
 	return 0
 }
 
-func (rm *RoomManager) MovePlayer(ppos, mpos Window.Pos, player *Player.Player) Window.Pos {
-	if ppos == mpos {
-		return ppos
+func (rm *RoomManager) MovePlayer(playerPos, movePos Window.Pos, player *Player.Player) Window.Pos {
+	if playerPos == movePos {
+		return playerPos
 	}
 	// Bounds checking
-	if mpos.Y < 0 || mpos.Y >= rm.height || mpos.X < 0 || mpos.X >= rm.width {
-		return ppos
+	if movePos.Y < 0 || movePos.Y >= rm.height || movePos.X < 0 || movePos.X >= rm.width {
+		return playerPos
 	}
 
-	rm.playerPos = mpos.Y*rm.width + mpos.X
+	rm.playerPos = movePos.Y*rm.width + movePos.X
 
-	switch rm.GetRoom(ppos).GetType() {
+	switch rm.GetRoom(playerPos).GetType() {
 	case Monster:
-		if rm.GetRoom(ppos).(*MonsterRoom).GetIsMonsterDead() {
-			return mpos
+		if rm.GetRoom(playerPos).(*MonsterRoom).GetIsMonsterDead() {
+			return movePos
 		}
-		player.TakeDamage(rm.GetRoom(ppos).(*MonsterRoom).GetDamage())
+		player.TakeDamage(rm.GetRoom(playerPos).(*MonsterRoom).GetDamage())
 	}
 
-	return mpos
+	return movePos
 }
 
 func (rm *RoomManager) GetRoom(pos Window.Pos) Room {

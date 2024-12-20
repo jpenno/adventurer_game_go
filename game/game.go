@@ -59,16 +59,16 @@ func (g *Game) input() {
 	var input string
 	fmt.Scanln(&input)
 
-	mpos := g.player.Pos
+	movePos := g.player.Pos
 	switch input {
 	case g.controlls.Up:
-		mpos.Y--
+		movePos.Y--
 	case g.controlls.Down:
-		mpos.Y++
+		movePos.Y++
 	case g.controlls.Left:
-		mpos.X--
+		movePos.X--
 	case g.controlls.Right:
-		mpos.X++
+		movePos.X++
 	case g.controlls.Quit:
 		g.state = Quit
 	case g.controlls.Attack:
@@ -77,7 +77,7 @@ func (g *Game) input() {
 		pickup(g.player, g.roomManager.GetRoom(g.player.Pos))
 	}
 
-	g.player.Pos = g.roomManager.MovePlayer(g.player.Pos, mpos, g.player)
+	g.player.Pos = g.roomManager.MovePlayer(g.player.Pos, movePos, g.player)
 }
 
 func attack(player *Player.Player, room Room.Room) {
